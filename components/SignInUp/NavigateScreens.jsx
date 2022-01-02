@@ -13,10 +13,9 @@ import { View } from 'react-native';
 export default function NavigateScreens(){
     return (
         <View style={{ flexGrow: 1, width: '100%', height: '100%' }}>
-            <NavigationContainer>
+            <NavigationContainer independent={true}>
                 <Stack.Navigator
                     screenOptions={{ headerShown: false, cardStyle: { backgroundColor: 'white' } }}
-                    
                 >
                     <Stack.Screen name="welcome" component={Welcome} />
                     <Stack.Screen name="signin" component={SignIn} />

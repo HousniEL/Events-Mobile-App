@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { Input } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export default function CustomizeInput({ name, value, ph, kT, aCT, tCT, iconName, fctCT, fctBl, err }){
+export default function CustomizeInput({ name, value, ph, kT, aCT, tCT, iconName, fctCT, fctBl, err, half }){
     return (
         <Input 
             value={value}
@@ -18,7 +18,7 @@ export default function CustomizeInput({ name, value, ph, kT, aCT, tCT, iconName
             leftIconContainerStyle={{
                 width: 30
             }}
-            containerStyle={styles.Container}
+            containerStyle={[styles.Container, half && { width: "48%" }]}
             inputStyle={styles.input}
             placeholderTextColor={"#999"}
             inputContainerStyle={styles.inputcontainer}

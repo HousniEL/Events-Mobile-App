@@ -64,6 +64,7 @@ export default function SignIn({ navigation }) {
                                         name="pwd"
                                         value={values.pwd}
                                         fctCT={handleChange}
+                                        plho={"password"}
                                         fctBl={handleBlur}
                                         err={(errors.pwd && touched.pwd) ? errors.pwd : null}
                                     />

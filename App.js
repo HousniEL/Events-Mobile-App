@@ -6,6 +6,8 @@ import NavigateScreens from './components/SignInUp/NavigateScreens';
 
 import 'react-native-gesture-handler';
 
+import FirstConnection from './components/Welcome/FirstConnection';
+
 export default function App() {
 
   return (
@@ -21,7 +23,7 @@ export default function App() {
               onStartShouldSetResponder={() => true}
               style={styles.container}
             >
-              <NavigateScreens />
+              <FirstConnection />
             </View>
           </TouchableWithoutFeedback>
         </KeyboardAvoidingView>

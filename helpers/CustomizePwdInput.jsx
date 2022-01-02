@@ -3,14 +3,14 @@ import { StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { Input } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export default function CustomizePwdInput({ name, value, fctCT, fctBl, err }){
+export default function CustomizePwdInput({ name, plho, value, fctCT, fctBl, err }){
 
     const [ pinsecure, setPinSecure ] = React.useState(true);
 
     return (
         <Input 
             value={value}
-            placeholder={"Password"}
+            placeholder={plho}
             keyboardType={"default"}
             autoCompleteType={'password'}
             textContentType={'password'}

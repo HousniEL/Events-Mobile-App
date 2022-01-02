@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
     StyleSheet,
     View,
@@ -20,13 +20,21 @@ import Colors from '../../helpers/colors';
 import CustomizeInput from '../../helpers/CustomizeInput';
 import CustomizePwdInput from '../../helpers/CustomizePwdInput';
 
+import { Flow } from 'react-native-animated-spinkit';
+import { signup } from '../../services/UserService';
+import Toast from 'react-native-toast-message';
+
 export default function SignUp({ navigation }) {
+
+    const [ wait, setWait ] = useState(false);
+    const [ emailerr, setemailerr ] = useState('');
 
     var fields = {
         firstname: '',
         lastname: '',
         email: '',
-        pwd: ''
+        password: '',
+        confirmPassword: '',
     };
 
     const SigninSchema = Yup.object().shape({
@@ -41,11 +49,40 @@ export default function SignUp({ navigation }) {
         email: Yup.string()
             .email("Not a valid email address!")
             .required("Required"),
-        pwd: Yup.string()
+        password: Yup.string()
             .min(8, "Too Short!")
             .max(20, "Too Long!")
             .required("Required"),
+        confirmPassword: Yup.string()
+            .required("Passwords must match")
+            .oneOf([Yup.ref("password"), null], "Passwords must match")
     });
+
+
+    function handleSubmit(values){
+        setWait(true);
+        signup(values, (succ) => {
+            Toast.show({
+                text1: 'Welcome',
+            });
+            setWait(false);
+        }, (err) => {
+            if ( err.message === "Network request failed" ) {
+                Toast.show({
+                    type: 'error',
+                    text1: 'Error',
+                    text2: err.message,
+                });
+            }
+            for( let key in err.errors ){
+                if(err.errors[key].kind === "unique"){
+                    eval(`set${key}err('${ key.charAt(0).toUpperCase() + key.slice(1) } already exist')`);
+                }
+            }
+            setWait(false);
+        })
+    }
+
     return (
         <ScrollView contentContainerStyle={{ width: Dimensions.get('screen').width, justifyContent: 'center', height: '100%' }}>
 
@@ -59,52 +96,75 @@ export default function SignUp({ navigation }) {
                     <Formik
                         initialValues={fields}
                         validationSchema={SigninSchema}
-                        onSubmit={(values) => console.log(values)}
+                        onSubmit={handleSubmit}
                     >
                         {
                             ({ handleChange, handleBlur, handleSubmit, errors, touched, values }) => (
                                 <View style={styles.formConatiner}>
                                     <Text style={{fontSize: 25, fontWeight: '700', color: Colors.lightBlue, marginBottom: 30}} >Events Share</Text>
                                     <Text style={{ fontSize: 21, marginBottom: 25, color: Colors.mediumOrange }}>Sign Up</Text>
-                                    <CustomizeInput 
-                                        name="firstname"
-                                        value={values.firstname}
-                                        ph={'First name'} kT={'default'} aCT={'username'} tCT={'username'} iconName={'account'}
-                                        fctCT={handleChange}
-                                        fctBl={handleBlur}
-                                        err={(errors.firstname && touched.firstname) ? errors.firstname : null}
-                                    />
-                                    <CustomizeInput 
-                                        name="lastname"
-                                        value={values.lastname}
-                                        ph={'Last name'} kT={'default'} aCT={'username'} tCT={'username'} iconName={'account'}
-                                        fctCT={handleChange}
-                                        fctBl={handleBlur}
-                                        err={(errors.lastname && touched.lastname) ? errors.lastname : null}
-                                    />
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }} >
+                                        <CustomizeInput 
+                                            name="firstname"
+                                            value={values.firstname}
+                                            ph={'First name'} kT={'default'} aCT={'username'} tCT={'username'} iconName={'account'}
+                                            fctCT={handleChange}
+                                            fctBl={handleBlur}
+                                            err={(errors.firstname && touched.firstname) ? errors.firstname : null}
+                                            half={true}
+                                        />
+                                        <CustomizeInput 
+                                            name="lastname"
+                                            value={values.lastname}
+                                            ph={'Last name'} kT={'default'} aCT={'username'} tCT={'username'} iconName={'account'}
+                                            fctCT={handleChange}
+                                            fctBl={handleBlur}
+                                            err={(errors.lastname && touched.lastname) ? errors.lastname : null}
+                                            half={true}
+                                        />
+                                    </View>
                                     <CustomizeInput 
                                         name="email"
                                         value={values.email}
                                         ph={'Email'} kT={'email-address'} aCT={'email'} tCT={'emailAddress'} iconName={'email'} 
                                         fctCT={handleChange}
                                         fctBl={handleBlur}
-                                        err={(errors.email && touched.email) ? errors.email : null}
+                                        err={
+                                            (emailerr !== "") ? (
+                                                emailerr
+                                            ) : (
+                                                (errors.email && touched.email) ?  errors.email : null
+                                            )
+                                        }
                                     />
                                     <CustomizePwdInput 
-                                        name="pwd"
-                                        value={values.pwd}
+                                        name="password"
+                                        plho="Password"
+                                        value={values.password}
                                         fctCT={handleChange}
                                         fctBl={handleBlur}
-                                        err={(errors.pwd && touched.pwd) ? errors.pwd : null}
+                                        err={(errors.password && touched.password) ? errors.password : null}
+                                    />
+                                    <CustomizePwdInput 
+                                        name="confirmPassword"
+                                        plho="Confirm Password"
+                                        value={values.confirmPassword}
+                                        fctCT={handleChange}
+                                        fctBl={handleBlur}
+                                        err={(errors.confirmPassword && touched.confirmPassword) ? errors.confirmPassword : null}
                                     />
                                     <Button onPress={handleSubmit} title="Sign Up"
+                                        disabled={wait}
+                                        disabledStyle={{ backgroundColor: Colors.mediumOrange }}
+                                        icon={wait && <Flow size={30} color={"white"} />}
+                                        titleStyle={ wait ? { display: 'none' } : null }
                                         buttonStyle={styles.signInStyle}
                                         containerStyle={{ marginTop: 10 }}
                                     />
                                     <View style={{
                                         justifyContent: 'center',
                                     }}>
-                                        <Divider orientation={'horizontal'} width={2} color={"#ddd"} style={{ marginVertical: 50 }} />
+                                        <Divider orientation={'horizontal'} width={2} color={"#ddd"} style={{ marginVertical: 40 }} />
                                         <Text style={{
                                             position: 'absolute',
                                             left: '42%',
@@ -130,6 +190,10 @@ export default function SignUp({ navigation }) {
 
                     </Formik>
                     <BottomSign navigation={navigation} />
+                    <Toast 
+                        position={"bottom"}
+                        bottomOffset={20}
+                    />
                 </View>
             </>
         </ScrollView>

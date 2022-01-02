@@ -1,31 +1,56 @@
 import { API_URL } from "@env";
+import { PublicHeader } from './headers';
 
-export async function insertUser(data, success, error){
-    const result = await fetch(`${API_URL}/user`, {
-        method: 'POST',
-        headers: {
-            'Content-Type' : "application/json",
-            "Accept": "application/json"
-        },
-        body: JSON.stringify(data)
-    });
+//import * as SecureStore from 'expo-secure-store';
 
-    const response = await result.json();
-    if(response.error) return error(response);
-    return success(response);
+
+export async function signup(data, success, error){
+    try{
+        const result = await fetch(`${API_URL}/user/signup`, {
+            method: 'POST',
+            ...PublicHeader,
+            body: JSON.stringify(data)
+        });
+    
+        const response = await result.json();
+        if(response.error) return error(response);
+        return success(response);
+    } catch (err) {
+        error(err);
+    }
+}
+
+export async function signin(data, success, error){
+    try{
+        const result = await fetch(`${API_URL}/user/signin`, {
+            method: 'POST',
+            ...PublicHeader,
+            body: JSON.stringify(data)
+        });
+    
+        const response = await result.json();
+        if(response.error) return error(response);
+        return success(response);
+    } catch (err) {
+        error(err);
+    }
 }
 
 export async function getUserInfo(data, success, error){
-    const result = await fetch(`${API_URL}/user`, {
-        method: 'GET',
-        headers: {
-            'Content-Type' : "application/json",
-            "Accept": "application/json"
-        },
-        body: JSON.stringify(data)
-    });
 
-    const response = await result.json();
-    if(response.error) return error(response);
-    return success(response);
+    //PublicHeader['headers']['Authorization'] = await SecureStore.getItemAsync('token');
+
+    try{
+        const result = await fetch(`${API_URL}/user`, {
+            method: 'GET',
+            ...PublicHeader,
+            body: JSON.stringify(data)
+        });
+    
+        const response = await result.json();
+        if(response.error) return error(response);
+        return success(response);
+    } catch (err) {
+        error(err);
+    }
 }

@@ -14,22 +14,21 @@ import colors from '../../helpers/colors';
 
 export default function Welcome({ handleSignIn }) {
 
-
-    //const { setCurrentUser } = useAuth();
+    const { setCurrentUser } = useAuth();
     
     async function check(){
-        //const token = await SecureStore.getItemAsync('token');
-        //const user = await SecureStore.getItemAsync('user');
-        //if(token && user){
-        //    setCurrentUser(JSON.parse(user));
-        //    handleSignIn(true);
-        //} else {
-        //    setCurrentUser();
+        const token = await SecureStore.getItemAsync('token');
+        const user = await SecureStore.getItemAsync('user');
+        if(token && user){
+            setCurrentUser(JSON.parse(user));
+            handleSignIn(true);
+        } else {
+            setCurrentUser();
             handleSignIn(false);
-       // }
+        }
     }
+    
     setTimeout(check, 5500);
-
 
     return (
         <View style={{ flexGrow: 1, height: '100%', width: '100%' }}>

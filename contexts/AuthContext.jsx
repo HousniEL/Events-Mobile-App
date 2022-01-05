@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 
-import UserService from '../services/UserService';
+import { openid, signup, signin, signout } from '../services/UserService';
 
 const AuthContext = React.createContext();
 
@@ -10,45 +10,49 @@ export function useAuth(){
 
 export function AuthProvider({ children }) {
 
-    const userService = new UserService();
-
     const [currentUser, setCurrentUser] = useState();
 
-    function signup(formData, success, error){
-        userService.signup(formData, (res) => {
-            setCurrentUser(res);
-            success(res);
+    function openID(formData, success, error){
+        openid(formData, (res) => {
+            setCurrentUser(res.user);
+            success();
         }, (err) => {
-            if(err.errors){
-                error(err.errors);
-            } else {
-                var { message } = err;
-                error({ message });
-            }
-        })
+            error(err);
+        });
     }
-    function signin(formData, success, error){
-        userService.signin(formData, (res) => {
-            setCurrentUser(res);
-            success(res);
+
+    function signUp(formData, success, error){
+        signup(formData, (res) => {
+            setCurrentUser(res.user);
+            success();
         }, (err) => {
             error(err);
         })
     }
-    /*function logout(success, error){
-        userService.signout( () => {
+    function signIn(formData, success, error){
+        signin(formData, (res) => {
+            setCurrentUser(res.user);
+            success();
+        }, (err) => {
+            error(err);
+        })
+    }
+    
+    function logout(success, error){
+        signout( () => {
             setCurrentUser();
             success();
         }, (err) => {
             error(err);
         })
-    }*/
+    }
 
     const value = {
         currentUser,
         setCurrentUser,
-        signup,
-        signin,
+        openID,
+        signUp,
+        signIn,
         logout
     }
 

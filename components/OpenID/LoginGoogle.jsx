@@ -10,10 +10,14 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import * as Google from 'expo-google-app-auth';
 import { AND_CLIENT_ID, IOS_CLIENT_ID } from '@env';
-import { insertUser } from '../../services/UserService';
+
+import { useAuth } from "../../contexts/AuthContext";
+
 const isAndroid = Platform.OS === "android" ? true : false;
 
 export default function LoginGoogle(){
+
+  const { openID } = useAuth();
 
     async function signInWithGoogleAsync() {
         try {
@@ -26,9 +30,15 @@ export default function LoginGoogle(){
             const data = {
               firstname: result.user.givenName,
               lastname: result.user.familyName,
-              email: result.user.email
+              email: result.user.email,
+              token: result.accessToken,
+              account: "google",
             }
-            insertUser(data);
+            openID(data, (res) => {
+              console.log(res);
+            }, (err) => {
+              console.log(err);
+            })
             return result.accessToken;
           } else {
             return { cancelled: true };

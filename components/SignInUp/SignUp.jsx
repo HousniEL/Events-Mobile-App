@@ -21,13 +21,15 @@ import CustomizeInput from '../../helpers/CustomizeInput';
 import CustomizePwdInput from '../../helpers/CustomizePwdInput';
 
 import { Flow } from 'react-native-animated-spinkit';
-import { signup } from '../../services/UserService';
+import { useAuth } from '../../contexts/AuthContext';
 import Toast from 'react-native-toast-message';
 
-export default function SignUp({ navigation }) {
+export default function SignUp({ navigation, signed }) {
 
     const [ wait, setWait ] = useState(false);
     const [ emailerr, setemailerr ] = useState('');
+
+    const { signUp } = useAuth();
 
     var fields = {
         firstname: '',
@@ -61,11 +63,9 @@ export default function SignUp({ navigation }) {
 
     function handleSubmit(values){
         setWait(true);
-        signup(values, (succ) => {
-            Toast.show({
-                text1: 'Welcome',
-            });
+        signUp(values, () => {
             setWait(false);
+            signed();
         }, (err) => {
             if ( err.message === "Network request failed" ) {
                 Toast.show({
@@ -87,11 +87,6 @@ export default function SignUp({ navigation }) {
         <ScrollView contentContainerStyle={{ width: Dimensions.get('screen').width, justifyContent: 'center', height: '100%' }}>
 
             <>
-                <TouchableWithoutFeedback
-                    onPress={() => { navigation.pop(); }}
-                >
-                    <MaterialCommunityIcons name="arrow-left" size={27} color={Colors.lightBlue} style={{ marginHorizontal: 25, marginTop: 50}} />
-                </TouchableWithoutFeedback>
                 <View style={styles.mainContainer}>
                     <Formik
                         initialValues={fields}

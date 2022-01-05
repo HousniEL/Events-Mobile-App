@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
     StyleSheet,
     View,
@@ -6,7 +6,8 @@ import {
     TouchableWithoutFeedback
 } from 'react-native';
 import { Divider, Button } from 'react-native-elements';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import { useAuth } from "../../contexts/AuthContext";
 
 import { Formik } from 'formik';
 import * as Yup from "yup";
@@ -16,8 +17,15 @@ import Colors from '../../helpers/colors';
 import CustomizeInput from '../../helpers/CustomizeInput';
 import CustomizePwdInput from '../../helpers/CustomizePwdInput';
 import LoginFacebook from '../OpenID/LoginFacebook';
+import { Flow } from 'react-native-animated-spinkit';
+import ErrorHolder from '../../helpers/ErrorHolder';
 
-export default function SignIn({ navigation }) {
+export default function SignIn({ navigation, signed }) {
+
+    const [ wait, setWait ] = useState(false);
+    const [ message, setMessage ] = useState();
+
+    const { signIn } = useAuth();
 
     var fields = {
         email: '',
@@ -32,25 +40,34 @@ export default function SignIn({ navigation }) {
             .max(20, "Too Long!")
             .required("Required"),
     });
+
+    function handleSubmit(values){
+        setMessage();
+        setWait(true);
+        signIn(values, () => {
+            setWait(false);
+            signed();
+        }, (err) => {
+            setMessage(err.message);
+            setWait(false);
+        })
+    }
+
     return (
         <>
-        <TouchableWithoutFeedback
-            onPress={() => { navigation.pop(); }}
-        >
-            <MaterialCommunityIcons name="arrow-left" size={27} color={Colors.lightBlue} style={{ marginHorizontal: 25, marginTop: 50}} />
-        </TouchableWithoutFeedback>
         <View style={styles.mainContainer}>
             <View style={{ width: '100%', alignItems: 'center' }}>
                 <Formik
                     initialValues={fields}
                     validationSchema={SigninSchema}
-                    onSubmit={(values) => console.log(values)}
+                    onSubmit={handleSubmit}
                 >
                     {
                         ({ handleChange, handleBlur, handleSubmit, errors, touched, values }) => (
                             <View style={styles.formConatiner}>
                                 <Text style={{fontSize: 25, fontWeight: '700', color: Colors.lightBlue, marginBottom: 30}} >Events Share</Text>
-                                <Text style={{ fontSize: 21, marginBottom: 25, color: Colors.mediumOrange }}>Sign In</Text>
+                                <Text style={{ fontSize: 21, marginBottom: 15, color: Colors.mediumOrange }}>Sign In</Text>
+                                { message && <ErrorHolder message={"Incorrect email or password."} /> }
                                 <CustomizeInput 
                                     name="email"
                                     value={values.email}
@@ -73,7 +90,11 @@ export default function SignIn({ navigation }) {
                                     </Text>
                                 </View>
                                 <Button onPress={handleSubmit} title="Sign In"
+                                    icon={ wait && <Flow color={"white"} size={30} /> }
+                                    titleStyle={ wait ? { display: 'none' } : null }
+                                    disabled={wait}
                                     buttonStyle={styles.signInStyle}
+                                    disabledStyle={{ backgroundColor: Colors.mediumOrange }}
                                     containerStyle={{ marginTop: 25 }}
                                 />
                                 <View style={{
@@ -168,3 +189,11 @@ const styles = StyleSheet.create({
         borderRadius: 5
     }
 })
+
+/*
+<TouchableWithoutFeedback
+    onPress={() => { navigation.pop(); }}
+>
+    <MaterialCommunityIcons name="arrow-left" size={27} color={Colors.lightBlue} style={{ marginHorizontal: 25, marginTop: 50}} />
+</TouchableWithoutFeedback>
+*/

@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Input } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import colors from './colors';
 
 export default function CustomizeInput({ name, value, ph, kT, aCT, tCT, iconName, fctCT, fctBl, err, half }){
     return (
@@ -21,7 +22,7 @@ export default function CustomizeInput({ name, value, ph, kT, aCT, tCT, iconName
             containerStyle={[styles.Container, half && { width: "48%" }]}
             inputStyle={styles.input}
             placeholderTextColor={"#999"}
-            inputContainerStyle={styles.inputcontainer}
+            inputContainerStyle={[styles.inputcontainer, err && { borderColor: colors.lightRed, borderWidth: 1, borderBottomWidth: 1 }]}
             onChangeText={fctCT(name)}
             onBlur={fctBl(name)}
             errorMessage={err}
@@ -48,7 +49,7 @@ const styles = StyleSheet.create({
     erroStyle: {
         fontSize: 13,
         fontWeight: '700',
-        color: '#F88',
+        color: colors.lightRed,
         marginTop: 0,
         marginBottom: 8,
     }

@@ -14,7 +14,7 @@ export function AuthProvider({ children }) {
 
     function openID(formData, success, error){
         openid(formData, (res) => {
-            setCurrentUser(res.user);
+            setCurrentUser(user);
             success();
         }, (err) => {
             error(err);
@@ -47,8 +47,12 @@ export function AuthProvider({ children }) {
         })
     }
 
+    function getCurrentUser(){
+        return currentUser;
+    }
+
     const value = {
-        currentUser,
+        getCurrentUser,
         setCurrentUser,
         openID,
         signUp,

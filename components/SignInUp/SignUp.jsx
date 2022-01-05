@@ -8,7 +8,6 @@ import {
     Dimensions
 } from 'react-native';
 import { Divider, Button } from 'react-native-elements';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { Formik } from 'formik';
 import * as Yup from "yup";
@@ -22,12 +21,13 @@ import CustomizePwdInput from '../../helpers/CustomizePwdInput';
 
 import { Flow } from 'react-native-animated-spinkit';
 import { useAuth } from '../../contexts/AuthContext';
-import Toast from 'react-native-toast-message';
+import ErrorHolder from '../../helpers/ErrorHolder';
 
 export default function SignUp({ navigation, signed }) {
 
     const [ wait, setWait ] = useState(false);
     const [ emailerr, setemailerr ] = useState('');
+    const [ message, setMessage ] = useState();
 
     const { signUp } = useAuth();
 
@@ -62,17 +62,15 @@ export default function SignUp({ navigation, signed }) {
 
 
     function handleSubmit(values){
+        setMessage();
         setWait(true);
+        setemailerr('');
         signUp(values, () => {
             setWait(false);
             signed();
         }, (err) => {
             if ( err.message === "Network request failed" ) {
-                Toast.show({
-                    type: 'error',
-                    text1: 'Error',
-                    text2: err.message,
-                });
+                setMessage(err.message);
             }
             for( let key in err.errors ){
                 if(err.errors[key].kind === "unique"){
@@ -96,8 +94,9 @@ export default function SignUp({ navigation, signed }) {
                         {
                             ({ handleChange, handleBlur, handleSubmit, errors, touched, values }) => (
                                 <View style={styles.formConatiner}>
-                                    <Text style={{fontSize: 25, fontWeight: '700', color: Colors.lightBlue, marginBottom: 30}} >Events Share</Text>
-                                    <Text style={{ fontSize: 21, marginBottom: 25, color: Colors.mediumOrange }}>Sign Up</Text>
+                                    <Text style={{fontSize: 25, fontWeight: '700', color: Colors.lightBlue, marginBottom: 25}} >Events Share</Text>
+                                    <Text style={{ fontSize: 21, marginBottom: 20, color: Colors.mediumOrange }}>Sign Up</Text>
+                                    { message && <ErrorHolder message={message} /> }
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }} >
                                         <CustomizeInput 
                                             name="firstname"
@@ -176,7 +175,7 @@ export default function SignUp({ navigation, signed }) {
                                         Sign Up using
                                     </Text>
                                     <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
-                                        <LoginGoogle />
+                                        <LoginGoogle signed={signed} />
                                         <LoginFacebook />
                                     </View>
                                 </View>
@@ -185,10 +184,6 @@ export default function SignUp({ navigation, signed }) {
 
                     </Formik>
                     <BottomSign navigation={navigation} />
-                    <Toast 
-                        position={"bottom"}
-                        bottomOffset={20}
-                    />
                 </View>
             </>
         </ScrollView>

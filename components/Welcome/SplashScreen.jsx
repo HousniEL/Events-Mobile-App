@@ -5,8 +5,9 @@ import {
     StyleSheet
 } from 'react-native';
 
-import logo from '../../assets/imgs/logo.png';
+import logo from '../../assets/imgs/logo2.png';
 
+import { useAuth } from "../../contexts/AuthContext";
 import * as SecureStore from 'expo-secure-store';
 
 import { Flow } from 'react-native-animated-spinkit';
@@ -14,9 +15,12 @@ import colors from '../../helpers/colors';
 
 export default function Welcome({ handleSignIn }) {
 
+    const [color, setColor] = React.useState(colors.mediumOrange);
+
     const { setCurrentUser } = useAuth();
     
     async function check(){
+        /*
         const token = await SecureStore.getItemAsync('token');
         const user = await SecureStore.getItemAsync('user');
         if(token && user){
@@ -26,7 +30,28 @@ export default function Welcome({ handleSignIn }) {
             setCurrentUser();
             handleSignIn(false);
         }
+        */
+       ///*
+        await SecureStore.deleteItemAsync('token');
+        await SecureStore.deleteItemAsync('user');
+        setCurrentUser();
+        handleSignIn(false);
+        //*/
     }
+
+    React.useEffect(() => {
+
+        var changeColor = true;
+        if(changeColor){
+            setInterval(() => {
+                color != colors.mediumOrange ? setColor(colors.mediumOrange) : setColor(colors.mediumBlue);
+            }, 1000);
+        }
+
+        return () => {
+            changeColor = false;
+        };
+    }, []);
     
     setTimeout(check, 5500);
 
@@ -43,7 +68,7 @@ export default function Welcome({ handleSignIn }) {
                     source={logo}
                 />
                 <View style={{ position: 'absolute', bottom: 100 }}>
-                    <Flow size={35} color={colors.mediumOrange} />
+                    <Flow size={35} color={color} />
                 </View>
             </View>
         </View>

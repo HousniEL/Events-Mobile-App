@@ -65,9 +65,9 @@ export default function SignIn({ navigation, signed }) {
                     {
                         ({ handleChange, handleBlur, handleSubmit, errors, touched, values }) => (
                             <View style={styles.formConatiner}>
-                                <Text style={{fontSize: 25, fontWeight: '700', color: Colors.lightBlue, marginBottom: 30}} >Events Share</Text>
-                                <Text style={{ fontSize: 21, marginBottom: 15, color: Colors.mediumOrange }}>Sign In</Text>
-                                { message && <ErrorHolder message={"Incorrect email or password."} /> }
+                                <Text style={{fontSize: 25, fontWeight: '700', color: Colors.lightBlue, marginBottom: 25}} >Events Share</Text>
+                                <Text style={{ fontSize: 21, marginBottom: 20, color: Colors.mediumOrange }}>Sign In</Text>
+                                { message && <ErrorHolder message={message} /> }
                                 <CustomizeInput 
                                     name="email"
                                     value={values.email}
@@ -117,7 +117,7 @@ export default function SignIn({ navigation, signed }) {
                                     Sign In using
                                 </Text>
                                 <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
-                                    <LoginGoogle />
+                                    <LoginGoogle signed={signed} />
                                     <LoginFacebook />
                                 </View>
                             </View>

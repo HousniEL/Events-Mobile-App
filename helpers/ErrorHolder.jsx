@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         borderLeftWidth: 5,
         paddingHorizontal: 10,
         paddingVertical: 15,
-        marginBottom: 15,
+        marginBottom: 20,
         borderRadius: 5,
         elevation: 5,
         backgroundColor: "white"

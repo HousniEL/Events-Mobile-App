@@ -15,7 +15,7 @@ import { useAuth } from "../../contexts/AuthContext";
 
 const isAndroid = Platform.OS === "android" ? true : false;
 
-export default function LoginGoogle(){
+export default function LoginGoogle({ signed }){
 
   const { openID } = useAuth();
 
@@ -34,8 +34,8 @@ export default function LoginGoogle(){
               token: result.accessToken,
               account: "google",
             }
-            openID(data, (res) => {
-              console.log(res);
+            openID(data, () => {
+              signed();
             }, (err) => {
               console.log(err);
             })

@@ -32,8 +32,13 @@ export async function signup(data, success, error) {
       body: JSON.stringify(data),
     });
 
+    console.log(data);
+
     const response = await result.json();
-    if (response.error) return error(response);
+
+    console.log(response);
+
+    if (response.error == true) return error(response);
     await SecureStore.setItemAsync("token", response.response.token);
     await SecureStore.setItemAsync(
       "user",

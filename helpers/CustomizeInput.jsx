@@ -14,7 +14,7 @@ export default function CustomizeInput({ name, value, ph, kT, aCT, tCT, iconName
             textContentType={tCT}
             autoCorrect={false}
             leftIcon={
-                <MaterialCommunityIcons name={iconName} size={20} color={"#999"} />
+                iconName && <MaterialCommunityIcons name={iconName} size={20} color={"#999"} />
             }
             leftIconContainerStyle={{
                 width: 30
@@ -23,8 +23,8 @@ export default function CustomizeInput({ name, value, ph, kT, aCT, tCT, iconName
             inputStyle={styles.input}
             placeholderTextColor={"#999"}
             inputContainerStyle={[styles.inputcontainer, err && { borderColor: colors.lightRed, borderWidth: 1, borderBottomWidth: 1 }]}
-            onChangeText={fctCT(name)}
-            onBlur={fctBl(name)}
+            onChangeText={ fctCT ? fctCT(name) : null}
+            onBlur={ fctBl ? fctBl(name) : null}
             errorMessage={err}
             errorStyle={styles.erroStyle}
         />

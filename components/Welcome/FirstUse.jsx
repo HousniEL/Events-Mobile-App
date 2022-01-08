@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 50,
         paddingVertical: 10,
         marginTop: width/25,
-        color: "#112d52aa",
+        color: colors.xLightBlue,
         fontSize: 16
     },
     paginationDot: { 

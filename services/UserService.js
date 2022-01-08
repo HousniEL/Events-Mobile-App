@@ -28,11 +28,12 @@ export async function signup(data, success, error) {
   try {
     const result = await fetch(`${API_URL}/user/signup`, {
       method: "POST",
-      ...PublicHeader,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
       body: JSON.stringify(data),
     });
-
-    console.log(data);
 
     const response = await result.json();
 

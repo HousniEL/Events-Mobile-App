@@ -17,7 +17,7 @@ export default function Editor() {
         ]
     });
 
-    onMessageReceived = (message) => {
+    function onMessageReceived(message){
         const { instruction, payload } = message;
         if (payload?.delta) {
           setContent(payload.delta);
@@ -26,11 +26,10 @@ export default function Editor() {
 
     return (
         <>
-            <View style={{ flexGrow: 1, padding: 10, marginBottom: 15 }}>
+            <View style={{ flexGrow: 1, width: '100%', padding: 10, marginBottom: 15 }}>
                 <WebViewQuillJS
                     content={defaultContent}
                     backgroundColor={"#FAEBD7"}
-                    onMessageReceived={onMessageReceived}
                 />
             </View>
         </>

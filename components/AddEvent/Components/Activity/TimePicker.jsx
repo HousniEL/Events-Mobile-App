@@ -21,9 +21,11 @@ export default function TimePicker({ setTimeRange }) {
         const currentDate = selectedDate || date;
         setShow(Platform.OS === 'ios');
         if(start){
+            setTimeRange("");
             setStartTime(currentDate);
         } else {
             setEndTime(currentDate);
+            setTimeRange( getHaMS() + " - " + getHaME(currentDate) )
         }
         setDate(currentDate);
     };
@@ -43,8 +45,8 @@ export default function TimePicker({ setTimeRange }) {
         var arr2p = startTime.toISOString().split('T')[1].split(':');
         return arr2p[0] + ':' + arr2p[1];
     }
-    function getHaME(){
-        var arr2p = endTime.toISOString().split('T')[1].split(':');
+    function getHaME(date){
+        var arr2p = date.toISOString().split('T')[1].split(':');
         return arr2p[0] + ':' + arr2p[1];
     }
 
@@ -52,12 +54,12 @@ export default function TimePicker({ setTimeRange }) {
         <View style={{ marginBottom: 8 }}>
             {show && (
                 <DateTimePicker
-                testID="dateTimePicker"
-                value={date}
-                mode={mode}
-                is24Hour={true}
-                display="default"
-                onChange={onChange}
+                    testID="dateTimePicker"
+                    value={date}
+                    mode={mode}
+                    is24Hour={true}
+                    display="default"
+                    onChange={onChange}
                 />
             )}
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -72,7 +74,7 @@ export default function TimePicker({ setTimeRange }) {
                 <TouchableWithoutFeedback onPress={() => showTimepicker(false)} >
                     <View style={styles.timeContainer}>
                         <Text style={styles.time}>
-                            { endTime ? getHaME() : "HH:MM" }
+                            { endTime ? getHaME(endTime) : "HH:MM" }
                         </Text>
                         <MaterialCommunityIcons name="clock-time-five-outline" color={colors.xLightBlue} size={18} />
                     </View>

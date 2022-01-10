@@ -19,6 +19,8 @@ export default function AddActivity({ visible, toggleVisibility, moreActivities,
                 day: day
             }
             moreActivities(obj);
+            setTimeRange("");
+            setDescription("");
             toggleVisibility();
         }
     }

@@ -18,6 +18,10 @@ export default function ActivitiesPerDay({ day, schedule, addActivity, deleteAct
     const [ visibility, setVisibility ] = useState(false);
     const [ activitiesList, setActivitiesList ] = useState(schedule[day]);
 
+    function refreshActivities(newList){
+        setActivitiesList(newList);
+    }
+
     function toggleVisibility(){
         setVisibility(!visibility);
     }
@@ -38,14 +42,14 @@ export default function ActivitiesPerDay({ day, schedule, addActivity, deleteAct
                 </TouchableWithoutFeedback>
                 <AddActivity visible={visibility} toggleVisibility={toggleVisibility} moreActivities={moreActivities} day={day} />
             </View>
-            <View>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: colors.xLightBlue, paddingVertical: 5 }} >
                 {
                     activitiesList ? (
                     activitiesList.map((val,idx) => (
-                        <ActivityContainer val={val} idx={idx} key={idx} deleteActivity={deleteActivity} />
+                        <ActivityContainer val={val} idx={idx} key={idx} deleteActivity={deleteActivity} refreshActivities={refreshActivities} />
                     ))
                     ) : (
-                        <Text style={{ textAlign: 'center', color: colors.xLightBlue }}>
+                        <Text style={{ textAlign: 'center', color: colors.xLightBlue, marginVertical: 10 }}>
                             Add activities
                         </Text>
                     )

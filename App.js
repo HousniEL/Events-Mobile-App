@@ -15,6 +15,7 @@ import "react-native-gesture-handler";
 
 import FirstConnection from "./components/Welcome/FirstConnection";
 import AddEvent from "./components/AddEvent/AddEvent";
+import UploadPhotos from "./components/AddEvent/Components/UploadPhotos/UploadPhotos.jsx";
 
 export default function App() {
   return (

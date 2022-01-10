@@ -3,14 +3,15 @@ import { StyleSheet, Text, View, TouchableWithoutFeedback } from 'react-native';
 import colors from '../../../../helpers/colors';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
-export default function ActivityContainer({ val, idx, deleteActivity }) {
+export default function ActivityContainer({ val, idx, deleteActivity, refreshActivities }) {
 
     function handleDelete(){
-        deleteActivity(val.day, idx);
+        var newSch = deleteActivity(val.day, idx);
+        refreshActivities(newSch);
     }
 
     return (
-        <View style={ styles.container } key={idx}>
+        <View style={ styles.container }>
             <View style={{ width: '90%' }}>
                 <Text style={ styles.name }>
                     { val.name }
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         paddingVertical: 10,
         borderRadius: 10,
-        marginVertical: 10
+        marginVertical: 5
     },
     name: {
         marginBottom: 5,

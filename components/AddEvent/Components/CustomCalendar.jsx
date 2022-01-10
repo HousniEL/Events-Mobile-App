@@ -108,7 +108,7 @@ export default function CustomCalendar() {
     }
 
     return (
-        <>
+        <View style={{ width: "90%", alignSelf: 'center' }}>
             <Calendar
                 minDate={ getDateString( new Date().getTime() ) }
                 markingType={'period'}
@@ -177,7 +177,7 @@ export default function CustomCalendar() {
                     ))
                 }
             </View>
-        </>
+        </View>
     )
 }
 
@@ -185,25 +185,6 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'column',
         justifyContent: 'space-between',
-        marginTop: 10,
+        marginTop: 10
     }
 })
-
-/*
-<View style={{ alignItems: 'flex-start' }}>
-                    <Text style={styles.label}>
-                        Starting Date
-                    </Text>
-                    <Text style={styles.content}>
-                        { !isEmpty(startDay) ? startDay.dayFormat : "dd mm yyyy" }
-                    </Text>
-                </View>
-                <View style={{ alignItems: 'flex-end' }}>
-                    <Text style={styles.label}>
-                        Ending Date
-                    </Text>
-                    <Text style={styles.content}>
-                        { !isEmpty(endDay) ? endDay.dayFormat : "dd mm yyyy" }
-                    </Text>
-                </View>
-*/

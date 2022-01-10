@@ -29,8 +29,11 @@ export function PeriodProvider({ children }){
 
     function deleteActivity(day, idx){
         var sch = schedule;
-        checkIfThereIsUndefined(sch, day, idx);
+        if(sch[day]){
+            checkIfThereIsUndefined(sch, day, idx);
+        }
         setSchedule(sch);
+        return sch[day];
     }
 
     function checkIfThereIsUndefined(obj, day, idx) {

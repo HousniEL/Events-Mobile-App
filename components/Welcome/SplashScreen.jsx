@@ -20,7 +20,7 @@ export default function Welcome({ handleSignIn }) {
     const { setCurrentUser } = useAuth();
     
     async function check(){
-        /*
+        ///*
         const token = await SecureStore.getItemAsync('token');
         const user = await SecureStore.getItemAsync('user');
         if(token && user){
@@ -30,13 +30,13 @@ export default function Welcome({ handleSignIn }) {
             setCurrentUser();
             handleSignIn(false);
         }
-        */
-       ///*
+        //*/
+       /*
         await SecureStore.deleteItemAsync('token');
         await SecureStore.deleteItemAsync('user');
         setCurrentUser();
         handleSignIn(false);
-        //*/
+       */
     }
 
     React.useEffect(() => {

@@ -14,8 +14,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import "react-native-gesture-handler";
 
 import FirstConnection from "./components/Welcome/FirstConnection";
-import AddEvent from "./components/AddEvent/AddEvent";
-import UploadPhotos from "./components/AddEvent/Components/UploadPhotos/UploadPhotos.jsx";
+import PhotoReader from "./components/PhotoReader";
 
 export default function App() {
   return (
@@ -32,7 +31,7 @@ export default function App() {
                 onStartShouldSetResponder={() => true}
                 style={styles.container}
               >
-                <AddEvent />
+                <PhotoReader />
               </View>
             </TouchableWithoutFeedback>
           </KeyboardAvoidingView>

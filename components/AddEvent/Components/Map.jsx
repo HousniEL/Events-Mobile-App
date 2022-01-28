@@ -1,30 +1,28 @@
 import React, { useState } from 'react';
 
-import { StyleSheet, Text, View } from 'react-native';
-
 import MapView, { Marker, ProviderPropType  } from 'react-native-maps';
 
 import colors from '../../../helpers/colors';
-
-export default function Map() {
+export default function Map({ updLocation, location }) {
 
     const [region, setRegion] = useState({
-        latitude: 37.78825,
-        longitude: -122.4324,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
+        latitude: location.latitude ? location.latitude : 28.07828754907326,
+        longitude: location.longitude ? location.longitude : -10.2977641671896,
+        latitudeDelta: location.latitudeDelta ? location.latitudeDelta : 20,
+        longitudeDelta: location.longitudeDelta ? location.longitudeDelta : 20,
       });
 
     const [marker, setMarker] = useState({
-        coordinate: { latitude: 37.78825, longitude: -122.4324 },
-        color: colors.mediumOrange
+        latitude: location.latitude ? location.latitude : 28.07828754907326, 
+        longitude: location.longitude ? location.longitude : -10.2977641671896
     });
 
     function changeMarker(region){
-        setMarker({
-            coordinate: { latitude: region.latitude, longitude: region.longitude },
-            color: colors.mediumOrange
-        })
+        var currentLocation = {
+            latitude: region.latitude, longitude: region.longitude
+        };
+        setMarker(currentLocation);
+        updLocation(region);
     }
 
     return (
@@ -35,8 +33,8 @@ export default function Map() {
                 onRegionChange={changeMarker}
             >
                 <Marker
-                    coordinate={marker.coordinate}
-                    pinColor={marker.color}
+                    coordinate={marker}
+                    pinColor={colors.mediumOrange}
                 />
             </MapView>
         </>

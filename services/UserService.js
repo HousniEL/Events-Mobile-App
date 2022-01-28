@@ -28,16 +28,11 @@ export async function signup(data, success, error) {
   try {
     const result = await fetch(`${API_URL}/user/signup`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
+      ...PublicHeader,
       body: JSON.stringify(data),
     });
 
     const response = await result.json();
-
-    console.log(response);
 
     if (response.error == true) return error(response);
     await SecureStore.setItemAsync("token", response.response.token);
@@ -87,5 +82,61 @@ export async function getUserInfo(data, success, error) {
     return success(response);
   } catch (err) {
     error(err);
+  }
+}
+
+export async function signout(data, success, error) {
+  try {
+    const result = await fetch(`${API_URL}/user/signout`, {
+      method: "POST",
+      ...PublicHeader,
+      body: JSON.stringify(data),
+    });
+
+    const response = await result.json();
+
+    if (response.error == true) return error(response);
+    await SecureStore.deleteItemAsync("token");
+    await SecureStore.deleteItemAsync("token");
+    return success(response);
+  } catch (err) {
+    error(err);
+  }
+}
+
+export async function getSomeUserInfo(data, success, error) {
+  try {
+    var response = await fetch(
+      `http://192.168.1.110:5000/api/user/getSomeUserInfo`,
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+        ...PublicHeader,
+      }
+    );
+
+    var result = await response.json();
+
+    if (result.error) return error(result);
+    return success(result);
+  } catch (e) {
+    error(e);
+  }
+}
+
+export async function getUserCreatedEvents(data, success, error) {
+  try {
+    var response = await fetch(`http://192.168.1.110:5000/api/event/user`, {
+      method: "POST",
+      body: JSON.stringify(data),
+      ...PublicHeader,
+    });
+
+    var result = await response.json();
+
+    if (result.error) return error(result);
+    return success(result);
+  } catch (e) {
+    error(e);
   }
 }

@@ -1,25 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     StyleSheet, 
     Text, 
     TouchableOpacity,
     View,
-    ScrollView,
-    TouchableWithoutFeedback
 } from 'react-native';
 import colors from '../../../helpers/colors';
-import { Input } from 'react-native-elements';
-
+import { Input, Button } from 'react-native-elements';
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Tags from 'react-native-tags';
 
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Map from './Map';
 
-export default function Form() {
+import { useForm } from "../Contexts/Form";
+
+import { isEmpty } from "lodash";
+
+export default function Form({ handleNext }) {
+
+    const { fillForm, form } = useForm();
 
     const [ title, setTitle ] = useState("");
     const [ nbrPlace, setNbrPlace ] = useState("");
-    const [ price, setPrice ] = useState(0);
+    const [ price, setPrice ] = useState("0");
+    const [ tags, setTags ] = useState([]);
+    const [ location, setLocation ] = useState({});
+
+    const [ error, setError ] = useState(false);
+
+    useEffect(() => {
+        if(!isEmpty(form)){
+            setTitle(form.title);
+            setNbrPlace(form.nbrplace);
+            setPrice(form.price);
+            setTags(form.tags);
+            setLocation(form.location);
+        }
+    }, [])
+
+    function Next(){
+
+        setError(false);
+
+        if( title != "" && nbrPlace != "" && price != ""){
+            if( tags != [] && !isEmpty(location) ){
+                var obj = {
+                    title: title,
+                    nbrplace: nbrPlace,
+                    price: price,
+                    tags: tags,
+                    location: location,
+                };
+        
+                fillForm(obj);
+                return handleNext();
+            }
+        }
+
+        setError(true);
+
+    }
+
+    function changeLocation(obj){
+        setLocation(obj);
+    }
 
     return (
         <View style={{ width: '90%', alignSelf: 'center' }}>
@@ -69,7 +113,8 @@ export default function Form() {
             Tags#
         </Text>
         <Tags
-            onChangeTags={tags => console.log(tags)}
+            initialTags={form.tags ? form.tags : []}
+            onChangeTags={setTags}
             containerStyle={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', minHeight: 50, marginBottom: 17 }}
             inputStyle={ styles.tagInput }
             createTagOnReturn={true}
@@ -80,7 +125,26 @@ export default function Form() {
         <Text style={ styles.label }>
             Maps
         </Text>
-        <Map />
+        <Map updLocation={changeLocation} location={form.location ? form.location : {}} />
+        <View style={styles.buttonContainer}>
+            <Button 
+                title={ "Next" }
+                onPress={ Next }
+                buttonStyle={{ width: 100, backgroundColor: colors.mediumOrange }}
+            />
+        </View>
+        <View style={ styles.errorContainer }>
+            {   
+                error && (
+                    <>
+                        <MaterialCommunityIcons name="alert-circle-outline" color="tomato" size={20} style={{ width: 20, height: 20 }} />
+                        <Text style={ styles.errorM }>
+                            Check if the fields and the location are all set
+                        </Text>
+                    </>
+                )
+            }
+        </View>
         </View>
     )
 };
@@ -128,5 +192,26 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: 'white',
         paddingHorizontal: 0
+    },
+    buttonContainer: { 
+        flexDirection: 'row', 
+        justifyContent: "flex-end", 
+        flexGrow: 1,
+        alignSelf: "center", 
+        width: '100%',
+        marginTop: 50,
+        marginBottom: 15
+    },
+    errorContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginBottom: 25
+    },
+    errorM: {
+        justifyContent: 'center',
+        textAlignVertical: 'center',
+        textAlign: 'center',
+        color: 'tomato',
+        marginLeft: 5
     }
 });

@@ -29,13 +29,13 @@ export default function SignIn({ navigation, signed }) {
 
     var fields = {
         email: '',
-        pwd: ''
+        password: ''
     };
 
     const SigninSchema = Yup.object().shape({
         email: Yup.string().email("Not a valid email address!")
             .required("Required"),
-        pwd: Yup.string()
+        password: Yup.string()
             .min(8, "Too Short!")
             .max(20, "Too Long!")
             .required("Required"),
@@ -78,12 +78,12 @@ export default function SignIn({ navigation, signed }) {
                                 />
                                 <View>
                                     <CustomizePwdInput 
-                                        name="pwd"
-                                        value={values.pwd}
+                                        name="password"
+                                        value={values.password}
                                         fctCT={handleChange}
                                         plho={"password"}
                                         fctBl={handleBlur}
-                                        err={(errors.pwd && touched.pwd) ? errors.pwd : null}
+                                        err={(errors.password && touched.password) ? errors.password : null}
                                     />
                                     <Text style={{ position: 'absolute', right: 0, top: 65, color: "#888" }}>
                                         Forgot Password?
@@ -189,11 +189,3 @@ const styles = StyleSheet.create({
         borderRadius: 5
     }
 })
-
-/*
-<TouchableWithoutFeedback
-    onPress={() => { navigation.pop(); }}
->
-    <MaterialCommunityIcons name="arrow-left" size={27} color={Colors.lightBlue} style={{ marginHorizontal: 25, marginTop: 50}} />
-</TouchableWithoutFeedback>
-*/

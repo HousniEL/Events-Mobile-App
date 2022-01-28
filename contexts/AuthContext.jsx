@@ -14,7 +14,7 @@ export function AuthProvider({ children }) {
 
     function openID(formData, success, error){
         openid(formData, (res) => {
-            setCurrentUser(user);
+            setCurrentUser(res.response.user);
             success();
         }, (err) => {
             error(err);
@@ -23,7 +23,7 @@ export function AuthProvider({ children }) {
 
     function signUp(formData, success, error){
         signup(formData, (res) => {
-            setCurrentUser(res.user);
+            setCurrentUser(res.response.user);
             success();
         }, (err) => {
             error(err);
@@ -31,7 +31,7 @@ export function AuthProvider({ children }) {
     }
     function signIn(formData, success, error){
         signin(formData, (res) => {
-            setCurrentUser(res.user);
+            setCurrentUser(res.response.user);
             success();
         }, (err) => {
             error(err);
@@ -39,7 +39,7 @@ export function AuthProvider({ children }) {
     }
     
     function logout(success, error){
-        signout( () => {
+        signout({ id : currentUser._id } , () => {
             setCurrentUser();
             success();
         }, (err) => {

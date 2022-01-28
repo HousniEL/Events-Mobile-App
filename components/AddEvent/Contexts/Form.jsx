@@ -11,20 +11,23 @@ export function FormProvider({ children }){
     const [ form, setForm ] = useState({});
 
     function fillForm(obj){
-        setForm(obj);
+        var newElements = form;
+        for( let [key, value] of Object.entries(obj) ){
+            newElements[key] = value;
+        }
+        setForm(newElements);
     }
 
-    function addLocation(obj){
-        var formC = form;
-        formC["latitude"] = obj.latitude;
-        formC["longitude"] = obj.longitude;
-        setForm(formC);
+    function addNewField(field, value){
+        let formCpy = form;
+        formCpy[field] = value;
+        setForm(formCpy);
     }
 
     const value = {
         form,
         fillForm,
-        addLocation
+        addNewField
     };
 
     return (
@@ -41,7 +44,8 @@ export function FormProvider({ children }){
         nbrplace: ,
         price: ,
         tags: [],
-        latitude:,
-        longitude
+        location: {},
+        description: {},
+        schedule: {}
     }
 */
